@@ -27,7 +27,9 @@ Route::group(['namespace' => 'Home'], function(){
     Route::get('/practice-index', 'PracticeController@index');
     Route::get('/practice', 'PracticeController@practice');
 });
-Route::group(['namespace' => 'Admin'], function(){
-
+Route::get('/adminlogin', 'Admin\LoginController@index');
+Route::post('/adminchecklogin', 'Admin\LoginController@checklogin');
+Route::group(['namespace' => 'Admin','middleware' => 'adminlogin'], function(){
+    Route::get('/adminhome', 'HomeController@index');
 
 });
