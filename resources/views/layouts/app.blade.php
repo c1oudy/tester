@@ -15,6 +15,9 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/vue.js') }}"></script>
+
+    <script src="{{ asset('js/layui/layui.js') }}"></script>
+    <link href="{{ asset('js/layui/css/layui.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -68,6 +71,13 @@
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
+                                    @if( Auth::user()->class_id != 2 )
+                                    <li>
+                                        <a href="{{route("addclass")}}">
+                                            班级审核
+                                        </a>
+                                    </li>
+                                    @endif
                                     <li>
                                         <a href="#">
                                             我的消息

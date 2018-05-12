@@ -26,10 +26,19 @@ Route::group(['namespace' => 'Home'], function(){
     Route::get('/evaluation', 'EvaluationController@index');
     Route::get('/practice-index', 'PracticeController@index');
     Route::get('/practice', 'PracticeController@practice');
+    Route::get('/addclass', 'UserController@addclass')->name('addclass');
+    Route::post('/useroperate', 'UserController@useroperate')->name('useroperate');
 });
 Route::get('/adminlogin', 'Admin\LoginController@index');
 Route::post('/adminchecklogin', 'Admin\LoginController@checklogin');
 Route::group(['namespace' => 'Admin','middleware' => 'adminlogin'], function(){
-    Route::get('/adminhome', 'HomeController@index');
-
+    Route::get('/adminhome', 'HomeController@index')->name('adminhome');
+    Route::get('/adminwelcome', 'HomeController@welcome')->name('adminwelcome');
+    Route::get('/admintype', 'QuestionController@type')->name('admintype');
+    Route::post('/addtype', 'QuestionController@addtype')->name('addtype');
+    Route::get('/classlist', 'UserController@index')->name('classlist');
+    Route::post('/editclass', 'UserController@editclass')->name('editclass');
+    Route::get('/userlist', 'UserController@userlist')->name('userlist');
+    Route::post('/homeuseroperate', 'UserController@useroperate')->name('homeuseroperate');
+    Route::post('/uploaduser', 'UserController@uploaduser')->name('uploaduser');
 });

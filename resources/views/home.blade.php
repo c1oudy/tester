@@ -15,10 +15,9 @@
                     @endif
 
                     <ul id="menu_list">
-                        <li>分类练习</li>
-                        <li>随机练习</li>
-                        <li>随机组题</li>
-                        <li>考试系统</li>
+                        @foreach($type as $item)
+                        <li><a href="">{{$item['name']}}</a></li>
+                        @endforeach
                     </ul>
                 </div>
             </div>

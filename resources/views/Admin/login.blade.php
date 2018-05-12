@@ -45,11 +45,6 @@
 
 </body>
 <script>
-    new Vue({
-        el: '.error',
-        data: {
-            message: '{{$errors}}'
-        }
-    })
+    
 </script>
 </html>
