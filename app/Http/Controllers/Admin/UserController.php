@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Admin\classModel;
 use App\Admin\userModel;
 use App\Admin\messageModel;
@@ -73,13 +74,21 @@ class UserController extends Controller
         }
     }
     public function userlist(){
-        $data['user'] = userModel::get()->toArray();
+        $limit = 10;
+        if(!isset($_GET['page'])){
+            $data['user'] = userModel::offset(0)->limit($limit)->get()->toArray();
+        }else{
+            $page =$_GET['page'];
+            $offset=($page-1)*$limit;
+            $data['user'] = userModel::offset($offset)->limit($limit)->get()->toArray();
+        }
         $data['class'] = classModel::get()->toArray();
         foreach ($data['class'] as $val){
             $id = $val['id'];
             $data['class']["$id"]=$val;
         }
         $data['class'][0]=1;
+        $data['count'] = userModel::count();
         return view("Admin/userlist",$data);
 
     }
@@ -96,9 +105,33 @@ class UserController extends Controller
             $bool = Storage::disk('uploads')->put($filename, file_get_contents($realPath));
         }
         Excel::load($realPath, function($reader) {
-            $data = $reader->all();
-            dd($data);
+            $reader = $reader->getSheet(0);
+            $data = $results = $reader->toArray();
+            $classname = $data[0][1];
+            $classno =  $data[0][3];
+            if(!classModel::where(['tid'=>$classno])->first()){
+                $class = new classModel();
+                $class->name=$classname;
+                $class->tid=$classno;
+                $class->statu=1;
+                $class->save();
+            }
+            array_shift($data);
+            array_shift($data);
+            $classid=classModel::where(['tid'=>$classno])->first()->id;
+            foreach($data as $val){
+                if(!userModel::where(['stuid'=>$val[2]])->first()){
+                    $user = new userModel();
+                    $user->name=$val[0];
+                    $user->email=$val[1];
+                    $user->stuid=$val[2];
+                    $user->password=bcrypt('12345678');
+                    $user->class_id=$classid;
+                    $user->statu=2;
+                    $user->save();
+                }
+            }
         });
-        var_dump($_POST);
+        return redirect(route('userlist'));
     }
 }

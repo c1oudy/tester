@@ -71,7 +71,7 @@
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
-                                    @if( Auth::user()->class_id != 2 )
+                                    @if( Auth::user()->statu != 2 )
                                     <li>
                                         <a href="{{route("addclass")}}">
                                             班级审核

@@ -48,7 +48,7 @@
             </table>
             <div style="text-align: center" id="test1"></div>
             <span><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".excelbox">上传用户</button></span>
-            <span><a href="{{asset('file/excel/example.xlsx')}}">下载模板</a></span>
+            <span><a href="{{asset('file/excel/example.xls')}}">下载模板</a></span>
         </section>
     </section>
 
@@ -72,7 +72,6 @@
             </div>
         </div>
     </div>
-
     <!--main content end-->
     </section>
     <!-- container section start -->
@@ -120,15 +119,15 @@
     <script>
         layui.use('laypage', function(){
             var laypage = layui.laypage;
-
             //执行一个laypage实例
             laypage.render({
                 elem: 'test1'
-                ,count: 5
-                ,limit: 2
+                ,count: {{$count}}
+                ,limit: 10
+                ,curr: {{isset($_GET['page'])?$_GET['page']:1}}
                 ,jump: function(obj, first) {
                     if (!first) {
-                        console.log(obj.curr);
+                        window.location.href = "{{route('userlist')}}"+'?page='+obj.curr
                     }
                 }
             });
