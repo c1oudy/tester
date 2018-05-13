@@ -25,9 +25,10 @@ Route::group(['namespace' => 'Home'], function(){
     Route::get('/exam', 'ExamController@index');
     Route::get('/evaluation', 'EvaluationController@index');
     Route::get('/practice-index', 'PracticeController@index');
-    Route::get('/practice', 'PracticeController@practice');
+    Route::get('/practice', 'PracticeController@practice')->name('practice');
     Route::get('/addclass', 'UserController@addclass')->name('addclass');
     Route::post('/useroperate', 'UserController@useroperate')->name('useroperate');
+    Route::post('/getquestion', 'QuestionController@getquestion')->name('getquestion');
 });
 Route::get('/adminlogin', 'Admin\LoginController@index');
 Route::post('/adminchecklogin', 'Admin\LoginController@checklogin');
@@ -41,4 +42,6 @@ Route::group(['namespace' => 'Admin','middleware' => 'adminlogin'], function(){
     Route::get('/userlist', 'UserController@userlist')->name('userlist');
     Route::post('/homeuseroperate', 'UserController@useroperate')->name('homeuseroperate');
     Route::post('/uploaduser', 'UserController@uploaduser')->name('uploaduser');
+    Route::get('/questionmanage', 'QuestionController@questionmanage')->name('questionmanage');
+    Route::post('/uploadquestion', 'QuestionController@uploadquestion')->name('uploadquestion');
 });

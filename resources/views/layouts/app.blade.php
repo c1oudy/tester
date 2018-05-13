@@ -42,7 +42,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-nav-flex">
-                        <li class="nav_li"><a href="{{ url('/practice-index') }}">练习</a></li>
+                        <li class="nav_li"><a href="{{ url('/home') }}">练习</a></li>
                         <li class="nav_li"><a href="{{ url('/evaluation') }}">测评</a></li>
                         <li class="nav_li"><a href="{{ url('/exam') }}">考试</a></li>
                     </ul>

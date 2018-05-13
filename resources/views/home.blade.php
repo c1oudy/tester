@@ -16,7 +16,7 @@
 
                     <ul id="menu_list">
                         @foreach($type as $item)
-                        <li><a href="">{{$item['name']}}</a></li>
+                        <li data-type="{{$item['id']}}" onclick="practice_type(this)"><a href="javascript:;">{{$item['name']}}</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -25,6 +25,9 @@
     </div>
 </div>
 <script type="text/javascript">
-    
+    function practice_type(obj) {
+        var type_id = $(obj).attr('data-type');
+        window.location.href="{{route('practice')}}"+'?type='+type_id
+    }
 </script>
 @endsection

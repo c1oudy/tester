@@ -102,9 +102,8 @@
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="menu_item" href="javascript:;">试题管理</a></li>
+                        <li><a class="menu_item" href="{{route('questionmanage')}}">试题管理</a></li>
                         <li><a class="menu_item" href="{{route('admintype')}}">分类管理</a></li>
-                        <li><a class="menu_item" href="javascript:;">难度管理</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
