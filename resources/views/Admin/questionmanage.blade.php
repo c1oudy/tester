@@ -126,11 +126,13 @@
         });
         $('.question_item').hover(function () {
             var index = '.'+$(this).attr('data-class')
-            console.log(index)
             var data = $(this).attr('data-answer');
-            layer.tips(data, index, {
-                tips: [1, '#0FA6D8'] //还可配置颜色
-            });
+            layui.use(['layer', 'form'], function() {
+                var layer = layui.layer
+                layer.tips(data, index, {
+                    tips: [1, '#0FA6D8'] //还可配置颜色
+                });
+            })
         })
     </script>
 @endsection

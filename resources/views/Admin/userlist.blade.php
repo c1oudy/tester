@@ -127,7 +127,11 @@
                 ,curr: {{isset($_GET['page'])?$_GET['page']:1}}
                 ,jump: function(obj, first) {
                     if (!first) {
-                        window.location.href = "{{route('userlist')}}"+'?page='+obj.curr
+                        @if(isset($_GET['class']))
+                            window.location.href = "{{route('userlist')}}"+'?class={{$_GET['class']}}&page='+obj.curr
+                        @else
+                            window.location.href = "{{route('userlist')}}"+'?page='+obj.curr
+                        @endif
                     }
                 }
             });

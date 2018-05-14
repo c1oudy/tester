@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">练习</div>
+                    <div class="panel-heading">我的收藏</div>
 
                     <div class="panel-body">
                         @if (session('status'))
@@ -19,7 +19,7 @@
                             <div id="answer">
                                 <ul>
                                     @foreach($answer as $val)
-                                    <li>{{$val['no']}}.{{$val['title']}}</li>
+                                        <li>{{$val['no']}}.{{$val['title']}}</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -32,7 +32,7 @@
                                 @endforeach
                             </div>
                             {{--<div id="img-box">--}}
-                                {{--<img class="question-img" src="{{ asset('image/timg.jpg') }}" alt="">--}}
+                            {{--<img class="question-img" src="{{ asset('image/timg.jpg') }}" alt="">--}}
                             {{--</div>--}}
                         </div>
 
@@ -62,7 +62,7 @@
                 var question = $('.question-list-active').attr('data-id')
                 $.post(url,{'_token': '{{ csrf_token() }}','question':question},function (v) {
                     if(v == 1){
-                        layer.msg('修改成功');
+                        window.location.reload()
                     }
                 });
             });

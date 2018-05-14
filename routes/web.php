@@ -29,6 +29,9 @@ Route::group(['namespace' => 'Home'], function(){
     Route::get('/addclass', 'UserController@addclass')->name('addclass');
     Route::post('/useroperate', 'UserController@useroperate')->name('useroperate');
     Route::post('/getquestion', 'QuestionController@getquestion')->name('getquestion');
+    Route::post('/questionoperate', 'QuestionController@questionoperate')->name('questionoperate');
+    Route::post('/changecollect', 'QuestionController@changecollect')->name('changecollect');
+    Route::get('/collect', 'UserController@collect');
 });
 Route::get('/adminlogin', 'Admin\LoginController@index');
 Route::post('/adminchecklogin', 'Admin\LoginController@checklogin');

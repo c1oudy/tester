@@ -42,7 +42,7 @@
                             <td>
                                 <div class="btn-group">
                                     <button type="button" data-id="{{$item['id']}}" class="btn btn-primary btn-sm deleteclass">删除</button>
-                                    <button type="button" data-id="{{$item['id']}}" class="btn btn-primary btn-sm edittype">查看</button>
+                                    <button type="button" data-id="{{$item['id']}}" class="btn btn-primary btn-sm userclass">查看</button>
                                 </div>
                             </td>
                         </tr>
@@ -155,10 +155,9 @@
             window.location.reload()
         });
     })
-    $('.edittype').click(function () {
-        $(this).parent().parent().siblings('.name-box').children().children().attr('disabled',false);
-        $(this).hide();
-        $(this).siblings('.submittype').show();
+    $('.userclass').click(function () {
+        var id = $(this).attr('data-id')
+        window.location.href = '{{route('userlist')}}'+'?class='+id
     });
     $('.submittype').click(function () {
         $(this).hide();

@@ -76,11 +76,23 @@ class UserController extends Controller
     public function userlist(){
         $limit = 10;
         if(!isset($_GET['page'])){
-            $data['user'] = userModel::offset(0)->limit($limit)->get()->toArray();
+            if(!isset($_GET['class'])){
+                $data['user'] = userModel::offset(0)->limit($limit)->get()->toArray();
+                $data['count'] = userModel::count();
+            }else{
+                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset(0)->limit($limit)->get()->toArray();
+                $data['count'] = userModel::where(['class_id'=>$_GET['class']])->count();
+            }
         }else{
             $page =$_GET['page'];
             $offset=($page-1)*$limit;
-            $data['user'] = userModel::offset($offset)->limit($limit)->get()->toArray();
+            if(!isset($_GET['class'])){
+                $data['user'] = userModel::offset($offset)->limit($limit)->get()->toArray();
+                $data['count'] = userModel::count();
+            }else{
+                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset($offset)->limit($limit)->get()->toArray();
+                $data['count'] = userModel::where(['class_id'=>$_GET['class']])->count();
+            }
         }
         $data['class'] = classModel::get()->toArray();
         foreach ($data['class'] as $val){
@@ -88,7 +100,6 @@ class UserController extends Controller
             $data['class']["$id"]=$val;
         }
         $data['class'][0]=1;
-        $data['count'] = userModel::count();
         return view("Admin/userlist",$data);
 
     }
