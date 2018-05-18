@@ -48,10 +48,8 @@ class ExamController extends Controller
         for ($i=0;$i<count($data['exam']);$i++){
             $data['exam']["$i"]['userexam']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['id'])->get()->toArray()[0]['id'];
             $data['exam']["$i"]['pass']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['pass'])->get()->toArray()[0]['pass'];
-            $data['exam']["$i"]['pass']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['score'])->get()->toArray()[0]['score'];
+            $data['exam']["$i"]['score']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['score'])->get()->toArray()[0]['score'];
         }
-//        dd($exam);
-        $data[]=1;
         return view('Home/exam/examlist',$data);
     }
     public function submitpaper(){

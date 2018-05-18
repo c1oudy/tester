@@ -12,7 +12,7 @@
                         @foreach($exam as $val)
                             <a href="{{route('exam')}}?id={{$val['userexam']}}">
                                 <div class="examlist">
-                                    <p>{{$val['title']}}(总分{{$val['total']}}) <span> @if($val['pass']==1) 已通过({{$val['score']}}分) @elseif($val['pass']==0) 截止日期2018-5-6 @elseif($val['pass']==2) 未通过({{$val['score']}}分) @endif</span></p>
+                                    <p>{{$val['title']}}(总分{{$val['total']}}) <span> @if($val['pass']==1) 已通过({{$val['score']}}分) @elseif($val['pass']==0) 截止日期{{$val['last']}} @elseif($val['pass']==2) 未通过({{$val['score']}}分) @endif</span></p>
                                 </div>
                             </a>
                         @endforeach
