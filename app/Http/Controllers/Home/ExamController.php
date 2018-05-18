@@ -55,6 +55,24 @@ class ExamController extends Controller
     }
     public function submitpaper(){
         $answer = explode(',',$_POST['answer']);
-        dd($answer) ;
+        $userwxamid = $_POST['ue'];
+        $questionid = explode(',',userexamModel::where(['id'=>$userwxamid])->select(['question'])->get()->toArray()[0]['question']);
+        sort($questionid);
+        $right = array_map('reset', questionModel::whereIn('id',$questionid)->select(['right'])->get()->toArray());
+        $score = 0;
+        for($i=0;$i<count($right);$i++){
+            if($right["$i"] == $answer["$i"]){
+                $score++;
+            }
+        }
+        $userexam = userexamModel::where(['id'=>$userwxamid])->get();
+        $userexam->score=$score;
+        if($score>=(count($right)*0.6)){
+            $userexam->pass = 1;
+        }else{
+            $userexam->pass = 2;
+        }
+        $userexam->save();
+        return redirect(route('examl'));
     }
 }
