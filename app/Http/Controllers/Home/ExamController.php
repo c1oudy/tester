@@ -23,4 +23,8 @@ class ExamController extends Controller
         $data = ['lefttime'=>4000];
         return view('Home/exam/exam',$data);
     }
+    public function examlist(){
+        $data[]=1;
+        return view('Home/exam/examlist',$data);
+    }
 }
