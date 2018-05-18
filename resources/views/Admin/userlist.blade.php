@@ -17,6 +17,7 @@
                 <tr>
                     <th>#</th>
                     <th>姓名</th>
+                    <th>学号</th>
                     <th>邮箱</th>
                     <th>班级</th>
                     <th>审核状态</th>
@@ -28,6 +29,7 @@
                     <tr>
                         <td>{{$item['id']}}</td>
                         <td>{{$item['name']}}</td>
+                        <td>{{$item['stuid']}}</td>
                         <td>{{$item['email']}}</td>
                         <td>
                             <p style="display: none">{{$id=$item['class_id']}}</p>

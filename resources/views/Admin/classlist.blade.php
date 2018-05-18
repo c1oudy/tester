@@ -5,10 +5,10 @@
     <section class="wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h3 class="page-header"><i class="fa fa-table"></i> 试题管理</h3>
+                <h3 class="page-header"><i class="fa fa-table"></i> 用户管理</h3>
                 <ol class="breadcrumb">
-                    <li><i class="fa fa-table"></i>试题管理</li>
-                    <li><i class="fa fa-th-list"></i>分类管理</li>
+                    <li><i class="fa fa-table"></i>用户管理</li>
+                    <li><i class="fa fa-th-list"></i>学院列表</li>
                 </ol>
             </div>
         </div>

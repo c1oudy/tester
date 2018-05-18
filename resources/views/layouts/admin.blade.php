@@ -113,8 +113,8 @@
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="menu_item" href="javascript:;">考试管理</a></li>
-                        <li><a class="menu_item" href="javascript:;">成绩查询</a></li>
+                        <li><a class="menu_item" href="{{route('examsetting')}}">考试发布</a></li>
+                        <li><a class="menu_item" href="{{route('examlist')}}">成绩查询</a></li>
                     </ul>
                 </li>
 
@@ -125,7 +125,7 @@
                         <span class="menu-arrow arrow_carrot-right"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="menu_item" href="{{route('classlist')}}">班级列表</a></li>
+                        <li><a class="menu_item" href="{{route('classlist')}}">学院列表</a></li>
                         <li><a class="menu_item" href="{{route('userlist')}}">用户审核</a></li>
                     </ul>
                 </li>

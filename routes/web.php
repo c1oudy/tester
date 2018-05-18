@@ -22,7 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::group(['namespace' => 'Home'], function(){
-    Route::get('/exam', 'ExamController@index');
+    Route::get('/examl', 'ExamController@examlist')->name('examl');
     Route::get('/evaluation', 'EvaluationController@index');
     Route::get('/practice-index', 'PracticeController@index');
     Route::get('/practice', 'PracticeController@practice')->name('practice');
@@ -32,6 +32,8 @@ Route::group(['namespace' => 'Home'], function(){
     Route::post('/questionoperate', 'QuestionController@questionoperate')->name('questionoperate');
     Route::post('/changecollect', 'QuestionController@changecollect')->name('changecollect');
     Route::get('/collect', 'UserController@collect');
+    Route::get('/exam', 'ExamController@index')->name('exam');
+    Route::post('/submitpaper', 'ExamController@submitpaper')->name('submitpaper');
 });
 Route::get('/adminlogin', 'Admin\LoginController@index');
 Route::post('/adminchecklogin', 'Admin\LoginController@checklogin');
@@ -47,4 +49,9 @@ Route::group(['namespace' => 'Admin','middleware' => 'adminlogin'], function(){
     Route::post('/uploaduser', 'UserController@uploaduser')->name('uploaduser');
     Route::get('/questionmanage', 'QuestionController@questionmanage')->name('questionmanage');
     Route::post('/uploadquestion', 'QuestionController@uploadquestion')->name('uploadquestion');
+    Route::get('/examsetting', 'ExamController@examsetting')->name('examsetting');
+    Route::get('/addexam', 'ExamController@addexam')->name('addexam');
+    Route::post('/checktitle', 'ExamController@checktitle')->name('checktitle');
+    Route::get('/examlist', 'ExamController@examlist')->name('examlist');
+    Route::post('/exadowmloadexcelmlist', 'ExamController@dowmloadexcel')->name('dowmloadexcel');
 });
