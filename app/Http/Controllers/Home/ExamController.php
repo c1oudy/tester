@@ -48,6 +48,7 @@ class ExamController extends Controller
         for ($i=0;$i<count($data['exam']);$i++){
             $data['exam']["$i"]['userexam']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['id'])->get()->toArray()[0]['id'];
             $data['exam']["$i"]['pass']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['pass'])->get()->toArray()[0]['pass'];
+            $data['exam']["$i"]['pass']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['score'])->get()->toArray()[0]['score'];
         }
 //        dd($exam);
         $data[]=1;
@@ -65,14 +66,15 @@ class ExamController extends Controller
                 $score++;
             }
         }
-        $userexam = userexamModel::where(['id'=>$userwxamid])->get();
+        $userexam = userexamModel::find($userwxamid);
         $userexam->score=$score;
+        $userexam->answer = implode(',',$answer);
         if($score>=(count($right)*0.6)){
             $userexam->pass = 1;
         }else{
             $userexam->pass = 2;
         }
         $userexam->save();
-        return redirect(route('examl'));
+        return 1;
     }
 }
