@@ -54,4 +54,5 @@ Route::group(['namespace' => 'Admin','middleware' => 'adminlogin'], function(){
     Route::post('/checktitle', 'ExamController@checktitle')->name('checktitle');
     Route::get('/examlist', 'ExamController@examlist')->name('examlist');
     Route::get('/exadowmloadexcelmlist', 'ExamController@dowmloadexcel')->name('dowmloadexcel');
+    Route::post('/editquestion', 'QuestionController@editquestion')->name('editquestion');
 });

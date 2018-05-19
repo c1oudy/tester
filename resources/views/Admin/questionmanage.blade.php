@@ -32,7 +32,7 @@
                         <th>{{$val['right']}}</th>
                         <th>{{$val['type_id']}}</th>
                         {{--<th>{{$val['dif_id']}}</th>--}}
-                        <th><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-id="{{$val['id']}}" data-target=".addtype">编辑</button></th>
+                        <th><button type="button" onclick="openedit(this)" class="btn btn-primary btn-sm" data-toggle="modal" data-id="{{$val['id']}}" data-target=".addtype">编辑</button></th>
                     </tr>
                     @endforeach
                 </tbody>
@@ -53,20 +53,17 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>问题</label>
-                        <input type="text" class="form-control" id="classname" placeholder="name">
+                        <input type="text" class="form-control" id="question" placeholder="name">
                     </div>
+                    <div id="answerbox"></div>
                     <div class="form-group">
-                        <label>选项</label>
-                        <input type="text" class="form-control" id="classid" placeholder="id">
-                    </div>
-                    <div class="form-group">
-                        <label>选项</label>
-                        <input type="text" class="form-control" id="classid" placeholder="id">
+                        <label>正确答案</label>
+                        <input type="text" class="form-control" id="rightitem" placeholder="name">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary btn-addtype">添加</button>
+                    <button type="button" class="btn btn-primary btn-addtype">修改</button>
                 </div>
             </div>
         </div>
@@ -142,9 +139,48 @@
                 });
             })
         })
-        $('.addtype').on('show.bs.modal', function (e) {
-            var id =$(this).attr('data-id')
-            console.log($(this))
+        function openedit(obj) {
+            var id =$(obj).attr('data-id')
+            var url = "{{route('editquestion')}}"
+            $.post(url,{'_token': '{{ csrf_token() }}',id:id},function (data) {
+                data=JSON.parse(data);
+                $('#question').val(data.question.title)
+                $('#question').attr('data-id',data.question.id)
+                var html = ''
+                $('#rightitem').val(data.question.right)
+                $('#rightitem').attr('data-id',data.question.title)
+                data.answer.forEach(function( val, index ) {
+                    html+='<div class="form-group">\n' +
+                        '                        <label>选项</label>\n' +
+                        '                        <input type="text" class="form-control editanswer" data-id="'+val.id+'" placeholder="id" value="'+val.title+'">\n' +
+                        '                    </div>'
+                });
+                $("#answerbox").empty()
+                $("#answerbox").append(html)
+            })
+        }
+        $('.btn-addtype').click(function () {
+            var questionid = $('#question').attr('data-id')
+            var title = $('#question').val();
+            var right = $('#rightitem').val();
+            var answer = [];
+            $('.editanswer').each(function () {
+                var index = $(this).attr('data-id')
+                answer[index] = $(this).val()
+            })
+            var url = "{{route('editquestion')}}"
+            $.post(url, {
+                '_token': '{{ csrf_token() }}',
+                questionid: questionid,
+                title: title,
+                right: right,
+                answer: answer,
+                type:'edit'
+            }, function (data) {
+               if(1){
+                   window.location.href = '{{route('questionmanage')}}'
+               }
+            })
         })
     </script>
 @endsection

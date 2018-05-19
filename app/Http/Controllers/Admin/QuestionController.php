@@ -110,5 +110,22 @@ class QuestionController extends Controller
         });
         return redirect(route('questionmanage'));
     }
-    
+    public function editquestion(){
+        if(isset($_POST['type']) && $_POST['type']== 'edit'){
+            $answer = array_filter($_POST['answer']);
+            $question = questionModel::find($_POST['questionid']);
+            $question->title = $_POST['title'];
+            $question->save();
+            foreach ($answer as $key=>$val){
+                $answer1 = answerModel::find($key);
+                $answer1->title = $val;
+                $answer1->save();
+            }
+            return 1;
+        }
+        $question = questionModel::find($_POST['id'])->toArray();
+        $data['question'] = $question;
+        $data['answer']=answerModel::where(['question_id'=>$question['id']])->get()->toArray();
+        echo json_encode($data);
+    }
 }
