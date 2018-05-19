@@ -28,6 +28,12 @@ class ExamController extends Controller
     {
         $id=$_GET['id'];
         $questionid=explode(',',userexamModel::where(['id'=>$id])->select(['question'])->get(['id'])->toArray()[0]['question']);
+        $userexam = userexamModel::find($id)->toArray();
+        if($userexam['pass'] != 0){
+            $chose = explode(',',$userexam['answer']);
+            $data['chose']=$chose;
+        }
+        sort($questionid);
         $data['questionid']=$questionid;
         $data['count']=count($questionid);
         $question = questionModel::whereIn('id',$questionid)->get()->toArray();
@@ -41,6 +47,7 @@ class ExamController extends Controller
         return view('Home/exam/exam',$data);
     }
     public function examlist(){
+        $data['now']=strtotime(date('Y-m-d'));
         $userid=Auth::user()->id;
         $userexam=userexamModel::where(['userid'=>$userid])->select(['examid'])->get()->toarray();
         $userexamid=array_map('reset',$userexam);
@@ -49,6 +56,7 @@ class ExamController extends Controller
             $data['exam']["$i"]['userexam']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['id'])->get()->toArray()[0]['id'];
             $data['exam']["$i"]['pass']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['pass'])->get()->toArray()[0]['pass'];
             $data['exam']["$i"]['score']=userexamModel::where(['userid'=>$userid,'examid'=>$data['exam']["$i"]['id']])->select(['score'])->get()->toArray()[0]['score'];
+            $data['exam']["$i"]['timestap']=strtotime($data['exam']["$i"]['last']);
         }
         return view('Home/exam/examlist',$data);
     }

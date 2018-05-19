@@ -10,9 +10,9 @@
 
                     <div class="panel-body">
                         @foreach($exam as $val)
-                            <a href="{{route('exam')}}?id={{$val['userexam']}}">
+                            <a @if($now<=$val['timestap']) href="{{route('exam')}}?id={{$val['userexam']}}"@else href='javascript:;' @endif>
                                 <div class="examlist">
-                                    <p>{{$val['title']}}(总分{{$val['total']}}) <span> @if($val['pass']==1) 已通过({{$val['score']}}分) @elseif($val['pass']==0) 截止日期{{$val['last']}} @elseif($val['pass']==2) 未通过({{$val['score']}}分) @endif</span></p>
+                                    <p>{{$val['title']}}(总分{{$val['total']}}) <span> @if($val['pass']==1) 已通过({{$val['score']}}分) @elseif($val['pass']==2) 未通过({{$val['score']}}分)  @elseif($val['pass']==0 && $now<=$val['timestap']) 截止日期{{$val['last']}} @else 已过期 @endif</span></p>
                                 </div>
                             </a>
                         @endforeach
@@ -22,5 +22,7 @@
         </div>
     </div>
     <script type="text/javascript">
+        $(function () {
+        })
     </script>
 @endsection

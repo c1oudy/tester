@@ -42,7 +42,7 @@
                         <div id="question-list">
                             <ul>
                                 @for ($i = 0; $i < count($questionid); $i++)
-                                    <li onclick="getquestion(this)" data-chose="" data-id="{{$questionid[$i]}}" @if($curid==$questionid[$i])class="question-list-active" @endif>{{($i+1)}}</li>
+                                    <li onclick="getquestion(this)" data-chose="@if(isset($chose["$i"])){{$chose["$i"]}}@endif" data-id="{{$questionid[$i]}}" @if($curid==$questionid[$i])class="question-list-active" @endif>{{($i+1)}}</li>
                                 @endfor
                             </ul>
                         </div>

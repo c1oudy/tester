@@ -63,7 +63,7 @@ class ExamController extends Controller
             $userexam->userid=$val['id'];
             $userexam->save();
         }
-        return redirect(route('examl'));
+        return redirect(route('examlist'));
     }
     public function examlist(){
         $data['exam'] = examModel::get()->toArray();
