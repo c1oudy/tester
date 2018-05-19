@@ -11,6 +11,7 @@ use App\Admin\userModel;
 use App\Admin\userexamModel;
 use App\Admin\questionModel;
 use App\Admin\typeModel;
+use DB;
 
 class ExamController extends Controller
 {
@@ -77,11 +78,52 @@ class ExamController extends Controller
         echo 1;
     }
     public function dowmloadexcel(){
-        $info = userexamModel::where(['examid'=>$_POST['id']])->get()->toArray();
-        Excel::create('学生成绩',function($excel) use ($info){
-            $excel->sheet('score', function($sheet) use ($info){
-                $sheet->rows($info);
-            });
+        $ueid=$_GET['id'];
+        $info = userexamModel::where(['examid'=>$_GET['id']])->get()->toArray();
+        $user = array();
+        foreach ($info as $val){
+            $user[] = $val['userid'];
+        }
+        $sreuser=implode(',',$user);
+        $class = DB::select("select class_id from users where id in($sreuser) GROUP BY class_id");
+        Excel::create('学生成绩',function($excel) use ($info,$class,$ueid){
+            foreach ($class as $val){
+                $score=[];
+                $sheetname = classModel::where(['id'=>$val->class_id])->get()->toArray()[0]['name'];
+                $userid = implode(',',array_map('reset',userModel::where(['class_id'=>$val->class_id])->select(['id'])->get()->toArray()));
+                $score = DB::select("select a.name,a.stuid,b.score from users a,userexam b where a.id=b.userid and a.id in ($userid) and b.examid=$ueid");
+                $score = array_map(function ($value) {
+                    return (array)$value;
+                }, $score);
+                array_unshift($score,['姓名','学号','分数']);
+                $excel->sheet("$sheetname", function($sheet) use ($score){
+                    $sheet->rows($score);
+                    $sheet->setWidth([
+                        'A' => 15,
+                        'B' => 15,
+                        'C' => 10,
+                    ]);
+                });
+
+            }
+            foreach ($class as $val){
+                $sheetname = classModel::where(['id'=>$val->class_id])->get()->toArray()[0]['name'];
+                $userid = implode(',',array_map('reset',userModel::where(['class_id'=>$val->class_id])->select(['id'])->get()->toArray()));
+                $score = DB::select("select a.name,a.stuid,b.score from users a,userexam b where a.id=b.userid and a.id in ($userid) and b.pass!=1 and b.examid=$ueid");
+                $score = array_map(function ($value) {
+                    return (array)$value;
+                }, $score);
+                array_unshift($score,['姓名','学号','分数']);
+                $excel->sheet("$sheetname"."（未通过）", function($sheet) use ($score){
+                    $sheet->rows($score);
+                    $sheet->setWidth([
+                        'A' => 15,
+                        'B' => 15,
+                        'C' => 10,
+                    ]);
+                });
+
+            }
         })->export('xls');
     }
 }

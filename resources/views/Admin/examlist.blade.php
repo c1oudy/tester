@@ -33,7 +33,7 @@
                             <td>{{(sprintf("%.2f",$val['major']/$val['total']))*100}}%</td>
                             <td>{{$val['time']/60}}分钟</td>
                             <td>{{$val['last']}}</td>
-                            <td><a href="javascript:;" onclick="dowmloadexcel(this)" data-id="{{$val['id']}}">下载成绩</a></td>
+                            <td><a href="{{route('dowmloadexcel')}}?id={{$val['id']}}"  data-id="{{$val['id']}}">下载成绩</a></td>
                         </tr>
                     @endforeach
                 </tbody>

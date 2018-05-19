@@ -32,6 +32,10 @@ class ExamController extends Controller
         if($userexam['pass'] != 0){
             $chose = explode(',',$userexam['answer']);
             $data['chose']=$chose;
+            $right = array_map('reset',questionModel::whereIn('id',$questionid)->select(['right'])->get()->toArray());
+            $data['right']=$right;
+            $data['right1']=$right[0];
+            $data['chose1']=$chose[0];
         }
         sort($questionid);
         $data['questionid']=$questionid;
@@ -44,6 +48,7 @@ class ExamController extends Controller
         $data['answer']=$answer;
         $data['curid']=$question[0]['id'];
         $data['lefttime']=1;
+        $data['pass']=$userexam['pass'];
         return view('Home/exam/exam',$data);
     }
     public function examlist(){

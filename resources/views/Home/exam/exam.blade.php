@@ -18,15 +18,15 @@
                             <h3>{{$question['title']}}</h3>
                             <div id="answer">
                                 <ul>
-                                    @foreach($answer as $val)
-                                        <li>{{$val['no']}}.{{$val['title']}}</li>
-                                    @endforeach
+                                    @for($i=0;$i<count($answer);$i++)
+                                        <li>{{$answer["$i"]['no']}}.{{$answer["$i"]['title']}}</li>
+                                    @endfor
                                 </ul>
                             </div>
 
                             <div id="chose-answer">
                                 @foreach($answer as $val)
-                                    <li data-answer="{{$val['no']}}" onclick="choseanswer(this)" class="anweritem">{{$val['no']}}</li>
+                                    <li data-answer="{{$val['no']}}" onclick="choseanswer(this)" class="anweritem @if(isset($right1) && isset($chose1) && $right1!=$chose1 && $val['no']==$chose1)wrong @endif @if(isset($right1) && $val['no']==$right1) chose-answer-active @endif">{{$val['no']}}</li>
                                 @endforeach
                             </div>
                             {{--<div id="img-box">--}}
@@ -42,7 +42,7 @@
                         <div id="question-list">
                             <ul>
                                 @for ($i = 0; $i < count($questionid); $i++)
-                                    <li onclick="getquestion(this)" data-chose="@if(isset($chose["$i"])){{$chose["$i"]}}@endif" data-id="{{$questionid[$i]}}" @if($curid==$questionid[$i])class="question-list-active" @endif>{{($i+1)}}</li>
+                                    <li onclick="getquestion(this)" data-chose="@if(isset($chose["$i"])){{$chose["$i"]}}@endif" data-id="{{$questionid[$i]}}" class="@if(isset($right["$i"]) && isset($chose["$i"]) && $right["$i"]!=$chose["$i"])wrong @endif @if($curid==$questionid[$i])question-list-active @endif ">{{($i+1)}}</li>
                                 @endfor
                             </ul>
                         </div>
@@ -52,7 +52,7 @@
                             </span>
                             <span onclick="getquestion(this)" class="exam-button pre-question" id="pre-question">上一题</span>
                             <span onclick="getquestion(this)" class="exam-button next-question" id="next-question">下一题</span>
-                            <span onclick="submitpaper(this)" class="exam-button submit-paper">交卷</span>
+                            @if($pass == 0)<span onclick="submitpaper(this)" class="exam-button submit-paper">交卷</span>@endif
                         </div>
                     </div>
                 </div>
@@ -159,8 +159,8 @@
                 $(obj).addClass('question-list-active');
                 id = $(obj).attr('data-id')
             }
-
-            $.post(url,{'_token': '{{ csrf_token() }}',id:id},function (data) {
+            var ue = '{{$_GET['id']}}'
+            $.post(url,{'_token': '{{ csrf_token() }}',id:id,ue:ue},function (data) {
                 data=JSON.parse(data);
                 $('#question h3').html(data.question.title)
                 var answerHtml = ''
@@ -187,6 +187,20 @@
                     $('.anweritem').each(function () {
                         if($(this).attr('data-answer') == chose){
                             $(this).addClass('chose-answer-active')
+                        }
+                    })
+                }
+                if(data.right){
+                    $('.anweritem').each(function () {
+                        if($(this).attr('data-answer') == data.right){
+                            $(this).addClass('chose-answer-active')
+                        }
+                    })
+                }
+                if(data.wrong){
+                    $('.anweritem').each(function () {
+                        if($(this).attr('data-answer') == data.wrong){
+                            $(this).addClass('wrong')
                         }
                     })
                 }

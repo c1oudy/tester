@@ -19,7 +19,7 @@
                     <th>内容</th>
                     <th>正确答案</th>
                     <th>分类</th>
-                    <th>难度</th>
+                    {{--<th>难度</th>--}}
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -31,8 +31,8 @@
                         <th>{{$val['title']}}</th>
                         <th>{{$val['right']}}</th>
                         <th>{{$val['type_id']}}</th>
-                        <th>{{$val['dif_id']}}</th>
-                        <th>操作</th>
+                        {{--<th>{{$val['dif_id']}}</th>--}}
+                        <th><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-id="{{$val['id']}}" data-target=".addtype">编辑</button></th>
                     </tr>
                     @endforeach
                 </tbody>
@@ -43,23 +43,31 @@
         </section>
     </section>
 
-    <div class="modal fade excelbox" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal fade addtype" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
-                <form action="{{route('uploadquestion')}}" method="post" enctype="multipart/form-data">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">上传试题</h4>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">编辑试题</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>问题</label>
+                        <input type="text" class="form-control" id="classname" placeholder="name">
                     </div>
-                    <div class="modal-body">
-                        {{ csrf_field() }}
-                        <input type="file" name="excel">
+                    <div class="form-group">
+                        <label>选项</label>
+                        <input type="text" class="form-control" id="classid" placeholder="id">
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary btn-addclass">添加</button>
+                    <div class="form-group">
+                        <label>选项</label>
+                        <input type="text" class="form-control" id="classid" placeholder="id">
                     </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn-addtype">添加</button>
+                </div>
             </div>
         </div>
     </div>
@@ -133,6 +141,10 @@
                     tips: [1, '#0FA6D8'] //还可配置颜色
                 });
             })
+        })
+        $('.addtype').on('show.bs.modal', function (e) {
+            var id =$(this).attr('data-id')
+            console.log($(this))
         })
     </script>
 @endsection

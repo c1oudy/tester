@@ -73,7 +73,7 @@
     border: 1px #1DAEF9 solid;
 }
 .question-list-active{
-    background: #1DAEF9;
+    background: #1DAEF9!important;
 }
 #question{
     padding: 30px;
@@ -196,4 +196,7 @@
 }
 .panel-body a{
     text-decoration: none;
+}
+.wrong{
+    background: red;
 }
