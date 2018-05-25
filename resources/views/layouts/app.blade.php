@@ -43,7 +43,6 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-nav-flex">
                         <li class="nav_li"><a href="{{ url('/home') }}">练习</a></li>
-                        <li class="nav_li"><a href="{{ url('/evaluation') }}">测评</a></li>
                         <li class="nav_li"><a href="{{ url('/examl') }}">考试</a></li>
                         <li class="nav_li"><a href="{{ url('/collect') }}">我的收藏</a></li>
                     </ul>
