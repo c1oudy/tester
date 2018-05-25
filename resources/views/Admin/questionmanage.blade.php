@@ -38,33 +38,28 @@
                 </tbody>
             </table>
             <div style="text-align: center" id="test1"></div>
-            <span><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".excelbox">上传试题</button></span>
+            <span><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".addquestion">上传试题</button></span>
             <span><a href="{{asset('file/excel/example.xls')}}">下载模板</a></span>
         </section>
     </section>
 
-    <div class="modal fade addtype" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal fade addquestion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">编辑试题</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>问题</label>
-                        <input type="text" class="form-control" id="question" placeholder="name">
+                <form action="{{route('uploadquestion')}}" method="post" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">添加试题</h4>
                     </div>
-                    <div id="answerbox"></div>
-                    <div class="form-group">
-                        <label>正确答案</label>
-                        <input type="text" class="form-control" id="rightitem" placeholder="name">
+                    <div class="modal-body">
+                        {{ csrf_field() }}
+                        <input type="file" name="excel">
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary btn-addtype">修改</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary btn-addclass">添加</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

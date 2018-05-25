@@ -55,7 +55,7 @@ class UserController extends Controller
             $data['curid']=$question[0]['id'];
             return view('Home/user/collect',$data);
         }else{
-            echo '无收藏';
+            return view('Home/practice/collect');
         }
     }
 }

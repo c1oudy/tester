@@ -98,7 +98,10 @@ class QuestionController extends Controller
             foreach($answer as $val){
                 $excelid = (int)$val[0];
                 $isset=$val[2];
-                if(!answerModel::where(['question_id'=>$index["$excelid"],'title'=>$isset])->get()){
+                dd($index);
+                $idq = $index[$excelid];
+                $a = answerModel::where(['question_id'=>$idq,'title'=>$isset])->get()->toArray();
+                if(!$a){
                     $answer =new answerModel();
                     $answer->question_id = $index["$excelid"];
                     $answer->no=$val[1];
