@@ -75,33 +75,38 @@ class QuestionController extends Controller
             $answer = $readerA->toArray();
             array_shift($answer);
             foreach($question as $val){
-                $type = typeModel::where(['name'=>$val[2]])->get()->toArray();
-                if(!$type){
-                    $type = new typeModel();
-                    $type->name = $val[2];
-                    $type->save();
+                if($val[2]){
                     $type = typeModel::where(['name'=>$val[2]])->get()->toArray();
-                }
-                $question=questionModel::where(['title'=>$val[1]])->get()->toArray();
-                if(!$question){
-                    $question = new questionModel();
-                    $question->type_id=$type[0]["id"];
-                    $question->title=$val[1];
-                    $question->dif_id=(int)$val[3];
-                    $question->right=$val[4];
-                    $question->save();
+                    if(!$type){
+                        $type = new typeModel();
+                        $type->name = $val[2];
+                        $type->save();
+                        $type = typeModel::where(['name'=>$val[2]])->get()->toArray();
+                    }
                     $question=questionModel::where(['title'=>$val[1]])->get()->toArray();
+                    if(!$question){
+                        $question = new questionModel();
+                        $question->type_id=$type[0]["id"];
+                        $question->title=$val[1];
+                        $question->dif_id=(int)$val[3];
+                        $question->right=$val[4];
+                        $question->save();
+                        $question=questionModel::where(['title'=>$val[1]])->get()->toArray();
+                    }
+                    $excelid=$val[0];
+                    $index["$excelid"]=$question[0]['id'];
                 }
-                $excelid=$val[0];
-                $index["$excelid"]=$question[0]['id'];
+
             }
+            $index[0]=0;
             foreach($answer as $val){
                 $excelid = (int)$val[0];
                 $isset=$val[2];
-                dd($index);
                 $idq = $index[$excelid];
                 $a = answerModel::where(['question_id'=>$idq,'title'=>$isset])->get()->toArray();
-                if(!$a){
+                echo "</br>";
+                if(!count($a) && $val[1] && $val[2]){
+                    echo 1;
                     $answer =new answerModel();
                     $answer->question_id = $index["$excelid"];
                     $answer->no=$val[1];
@@ -114,6 +119,11 @@ class QuestionController extends Controller
         return redirect(route('questionmanage'));
     }
     public function editquestion(){
+        if(isset($_POST['type']) && $_POST['type']== 'delete'){
+            $id = $_POST['id'];
+            questionModel::destroy($id);
+            return 1;
+        }
         if(isset($_POST['type']) && $_POST['type']== 'edit'){
             $answer = array_filter($_POST['answer']);
             $question = questionModel::find($_POST['questionid']);

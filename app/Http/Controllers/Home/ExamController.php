@@ -47,7 +47,8 @@ class ExamController extends Controller
         $data['question']=$question[0];
         $data['answer']=$answer;
         $data['curid']=$question[0]['id'];
-        $data['lefttime']=1;
+        $lefttime = examModel::where(['id'=>$userexam['examid']])->get()->toArray()[0]['time'];
+        $data['lefttime']=10;
         $data['pass']=$userexam['pass'];
         return view('Home/exam/exam',$data);
     }

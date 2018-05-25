@@ -43,7 +43,9 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-nav-flex">
                         <li class="nav_li"><a href="{{ url('/home') }}">练习</a></li>
+                        @if(isset(Auth::user()->class_id) && isset(Auth::user()->statu) && Auth::user()->class_id && Auth::user()->statu)
                         <li class="nav_li"><a href="{{ url('/examl') }}">考试</a></li>
+                        @endif
                         <li class="nav_li"><a href="{{ url('/collect') }}">我的收藏</a></li>
                     </ul>
 
@@ -78,11 +80,6 @@
                                         </a>
                                     </li>
                                     @endif
-                                    <li>
-                                        <a href="#">
-                                            我的消息
-                                        </a>
-                                    </li>
                                 </ul>
                             </li>
                         @endguest

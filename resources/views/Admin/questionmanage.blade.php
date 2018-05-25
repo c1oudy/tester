@@ -32,7 +32,7 @@
                         <th>{{$val['right']}}</th>
                         <th>{{$val['type_id']}}</th>
                         {{--<th>{{$val['dif_id']}}</th>--}}
-                        <th><button type="button" onclick="openedit(this)" class="btn btn-primary btn-sm" data-toggle="modal" data-id="{{$val['id']}}" data-target=".addtype">编辑</button></th>
+                        <th><button type="button" class="btn btn-primary btn-sm delete" data-id="{{$val['id']}}">删除</button><button type="button" onclick="openedit(this)" class="btn btn-primary btn-sm" data-toggle="modal" data-id="{{$val['id']}}" data-target=".addtype">编辑</button></th>
                     </tr>
                     @endforeach
                 </tbody>
@@ -60,6 +60,29 @@
                         <button type="submit" class="btn btn-primary btn-addclass">添加</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade addtype" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">修改试题</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>内容</label>
+                        <input type="text" class="form-control" id="question" placeholder="name">
+                    </div>
+                    <div id="answerbox">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn-addtype">修改</button>
+                </div>
             </div>
         </div>
     </div>
@@ -175,6 +198,13 @@
                if(1){
                    window.location.href = '{{route('questionmanage')}}'
                }
+            })
+        })
+        $('.delete').click(function () {
+            var id = $(this).attr('data-id')
+            var url = "{{route('editquestion')}}"
+            $.post(url,{'_token': '{{ csrf_token() }}',id:id,type:'delete'},function (data) {
+                window.location.href = '{{route('questionmanage')}}'
             })
         })
     </script>

@@ -53,6 +53,7 @@
                             <span onclick="getquestion(this)" class="exam-button pre-question" id="pre-question">上一题</span>
                             <span onclick="getquestion(this)" class="exam-button next-question" id="next-question">下一题</span>
                             @if($pass == 0)<span onclick="submitpaper(this)" class="exam-button submit-paper">交卷</span>@endif
+                             <input type="hidden" class="lefttime" @if($pass != 0)value="1"@endif>
                         </div>
                     </div>
                 </div>
@@ -61,10 +62,29 @@
     </div>
     <script type="text/javascript">
         var intDiff = parseInt({{ $lefttime }});//倒计时总秒数量
+        var timestatu = $('.lefttime').val()
         function timer(intDiff){
             window.setInterval(function(){
-                if(intDiff == 0){
-                    //时间到
+                if(intDiff == 0 && !timestatu){
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        layer.confirm('时间到', {
+                            closeBtn: 0,
+                            btn: ['交卷'] //按钮
+                        }, function(){
+                            var chose = new Array()
+                            $('#question-list ul li').each(function () {
+                                chose.push($(this).attr('data-chose'))
+                            })
+
+                            var url = '{{route('submitpaper')}}'
+                            $.post(url,{'_token': '{{ csrf_token() }}',ue:'{{$_GET['id']}}',answer: chose.join(',')},function (data) {
+                                if(data == 1){
+                                    window.location.href = '{{route('examl')}}'
+                                }
+                            })
+                        });
+                    });
                 }
                 var day=0,
                     hour=0,

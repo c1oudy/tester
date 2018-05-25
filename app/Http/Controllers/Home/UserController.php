@@ -14,6 +14,11 @@ use App\Admin\collectModel;
 class UserController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     protected $user;
 
     public function addclass(){
