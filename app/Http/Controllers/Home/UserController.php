@@ -63,4 +63,14 @@ class UserController extends Controller
             return view('Home/practice/collect');
         }
     }
+    public function myinfo(){
+        $user = Auth::user()->toArray();
+        $data['stu_id'] = userModel::where(['id'=>$user['id']])->get()->toArray()[0]['stuid'];
+        if($user['class_id']){
+            $data['class'] = classModel::where(['id'=>$user['class_id']])->get()->toArray()[0]['name'];
+        }else{
+            $data['class']=0;
+        }
+        return view('Home/user/myinfo',$data);
+    }
 }

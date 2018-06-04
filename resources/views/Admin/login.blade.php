@@ -23,7 +23,7 @@
                     @if($errors->has('username'))
                         <p><span></span><span class="error">{{ $errors->first('username') }}</span></p>
                     @endif
-                    <p><span>密码:</span><input placeholder="请输入密码" type="text" name="password"></p>
+                    <p><span>密码:</span><input placeholder="请输入密码" type="password" name="password"></p>
                     @if($errors->has('password'))
                         <p><span></span><span class="error">{{ $errors->first('password') }}</span></p>
                     @endif

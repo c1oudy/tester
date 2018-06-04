@@ -77,20 +77,20 @@ class UserController extends Controller
         $limit = 10;
         if(!isset($_GET['page'])){
             if(!isset($_GET['class'])){
-                $data['user'] = userModel::offset(0)->limit($limit)->get()->toArray();
+                $data['user'] = userModel::offset(0)->limit($limit)->orderBy('id', 'desc')->get()->toArray();
                 $data['count'] = userModel::count();
             }else{
-                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset(0)->limit($limit)->get()->toArray();
+                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset(0)->orderBy('id', 'desc')->limit($limit)->get()->toArray();
                 $data['count'] = userModel::where(['class_id'=>$_GET['class']])->count();
             }
         }else{
             $page =$_GET['page'];
             $offset=($page-1)*$limit;
             if(!isset($_GET['class'])){
-                $data['user'] = userModel::offset($offset)->limit($limit)->get()->toArray();
+                $data['user'] = userModel::offset($offset)->limit($limit)->orderBy('id', 'desc')->get()->toArray();
                 $data['count'] = userModel::count();
             }else{
-                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset($offset)->limit($limit)->get()->toArray();
+                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset($offset)->limit($limit)->orderBy('id', 'desc')->get()->toArray();
                 $data['count'] = userModel::where(['class_id'=>$_GET['class']])->count();
             }
         }

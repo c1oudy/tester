@@ -5,50 +5,24 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">练习</div>
-
+                <div class="panel panel-default" style="height: 300px">
+                    <div class="panel-heading">我的信息</div>
+                    <form class="layui-form" action="{{'addexam'}}" style="margin-top: 40px">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width: 137px;text-align: left;">学号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="stuid" value="@if($stu_id) {{$stu_id}}@endif" id="stuid" placeholder="暂未添加学号" @if($stu_id) disabled="disabled" {{$stu_id}}@endif autocomplete="off" class="layui-input" style="width: 200px">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width: 137px;text-align: left;">班级</label>
+                            <div class="layui-input-block">
+                                <lable style="display: inline-block;line-height: 39px;">@if($class) {{$class}} @else 暂未添加班级信息 @endif</lable>
+                            </div>
+                        </div>
+                    </form>
                     <div class="panel-body">
-                        @if (session('status'))
-                            <div class="alert alert-success">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-                        <div id="question">
-                            <h3>{{$question['title']}}</h3>
-                            <div id="answer">
-                                <ul>
-                                    @foreach($answer as $val)
-                                    <li>{{$val['no']}}.{{$val['title']}}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
 
-                            <div id="chose-answer">
-                                @foreach($answer as $val)
-                                    <li data-answer="{{$val['no']}}" onclick="choseanswer(this)" class="anweritem">{{$val['no']}}</li>
-                                @endforeach
-                            </div>
-                            {{--<div id="img-box">--}}
-                                {{--<img class="question-img" src="{{ asset('image/timg.jpg') }}" alt="">--}}
-                            {{--</div>--}}
-                        </div>
-
-                        <div id="question-list">
-                            <ul>
-                                @for ($i = 0; $i < count($questionid); $i++)
-                                    <li onclick="getquestion(this)" data-id="{{$questionid[$i]}}" @if($curid==$questionid[$i])class="question-list-active" @endif>{{($i+1)}}</li>
-                                @endfor
-                            </ul>
-                        </div>
-                        <div id="exam-btn">
-                            <span class="layui-form">
-                                <input type="checkbox"  lay-filter="collect" value="" id="collect" name="collect" title="收藏"  @if ($collect)checked @endif>
-                            </span>
-                            <span onclick="getquestion(this)" class="exam-button pre-question" id="pre-question">上一题</span>
-                            <span onclick="getquestion(this)" class="exam-button next-question" id="next-question">下一题</span>
-                            {{--<span class="exam-button submit-paper">交卷</span>--}}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -63,7 +37,7 @@
                 var question = $('.question-list-active').attr('data-id')
                 $.post(url,{'_token': '{{ csrf_token() }}','question':question},function (v) {
                     if(v == 1){
-                        layer.msg('修改成功');
+                        window.location.reload()
                     }
                 });
             });

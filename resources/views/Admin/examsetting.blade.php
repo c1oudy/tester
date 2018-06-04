@@ -48,7 +48,7 @@
                     <label class="layui-form-label" style="width: 137px;text-align: left;">考试单位</label>
                     <div class="layui-input-block">
                         @foreach($class as $val)
-                        <input type="checkbox" lay-filter="class" name="class[{{$val['id']}}]" title="{{$val['name']}}">
+                        <input type="checkbox" lay-filter="class" name="class[{{$val['id']}}]" title="{{$val['name']}}"><span>(12)</span>
                         @endforeach
                     </div>
                 </div>

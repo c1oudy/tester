@@ -65,12 +65,12 @@
             <ul class="nav pull-right top-menu">
                 <!-- alert notification end-->
                 <!-- user login dropdown start-->
-                <li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <span class="username">{{ Session::get('adminuser')->name }}</span>
-                        <b class="caret"></b>
-                    </a>
-                </li>
+                {{--<li class="dropdown">--}}
+                    {{--<a data-toggle="dropdown" class="dropdown-toggle" href="#">--}}
+                        {{--<span class="username">{{ Session::get('adminuser')->name }}</span>--}}
+                        {{--<b class="caret"></b>--}}
+                    {{--</a>--}}
+                {{--</li>--}}
                 <!-- user login dropdown end -->
             </ul>
             <!-- notificatoin dropdown end-->

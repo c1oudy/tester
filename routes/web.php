@@ -34,6 +34,7 @@ Route::group(['namespace' => 'Home'], function(){
     Route::get('/collect', 'UserController@collect');
     Route::get('/exam', 'ExamController@index')->name('exam');
     Route::post('/submitpaper', 'ExamController@submitpaper')->name('submitpaper');
+    Route::get('/myinfo', 'UserController@myinfo')->name('myinfo');
 });
 Route::get('/adminlogin', 'Admin\LoginController@index');
 Route::post('/adminchecklogin', 'Admin\LoginController@checklogin');

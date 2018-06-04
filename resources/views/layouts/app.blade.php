@@ -80,6 +80,11 @@
                                         </a>
                                     </li>
                                     @endif
+                                    <li>
+                                        <a href="{{route("myinfo")}}">
+                                            我的信息
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         @endguest
