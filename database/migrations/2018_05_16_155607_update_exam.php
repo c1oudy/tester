@@ -13,7 +13,6 @@ class UpdateExam extends Migration
      */
     public function up()
     {
-        //
         Schema::table('exam', function($table){
             $table->dateTime('last');
             $table->timestamps();

@@ -15,7 +15,7 @@
                             </div>
                         @endif
                         <div id="question">
-                            <h3>{{$question['title']}}</h3>
+                            <h3>@if($question['qid']==0)(单选题)@elseif($question['qid']==1)<input type="hidden" value="1" class="ismulty">(多选题)@elseif($question['qid']==2)(判断题)@endif{{$question['title']}}</h3>
                             <div id="answer">
                                 <ul>
                                     @for($i=0;$i<count($answer);$i++)
@@ -26,19 +26,21 @@
 
                             <div id="chose-answer">
                                 @foreach($answer as $val)
-                                    <li data-answer="{{$val['no']}}" onclick="choseanswer(this)" class="anweritem @if(isset($right1) && isset($chose1) && $right1!=$chose1 && $val['no']==$chose1)wrong @endif @if(isset($right1) && $val['no']==$right1) chose-answer-active @endif">{{$val['no']}}</li>
+                                    <li data-answer="{{$val['no']}}" onclick="choseanswer(this)" class="anweritem @if($question['qid']==1) multyquestion @endif @if(isset($right1) && isset($chose1) && !(strpos($right1,$val['no'])!==false)  && (strpos($chose1, $val['no']) !== false))wrong @endif @if(isset($right1) && isset($chose1) && (strpos($right1,$val['no'])!==false)) chose-answer-active @endif">{{$val['no']}}</li>
                                 @endforeach
                             </div>
                             {{--<div id="img-box">--}}
                             {{--<img class="question-img" src="{{ asset('image/timg.jpg') }}" alt="">--}}
                             {{--</div>--}}
                         </div>
-                        <div id="left-time">
-                            <p><strong>剩余时间</strong></p>
-                            <strong id="hour_show">0时</strong>
-                            <strong id="minute_show">0分</strong>
-                            <strong id="second_show">0秒</strong>
-                        </div>
+                            @if($pass == 0)
+                                <div id="left-time">
+                                    <p><strong>剩余时间</strong></p>
+                                    <strong id="hour_show">0时</strong>
+                                    <strong id="minute_show">0分</strong>
+                                    <strong id="second_show">0秒</strong>
+                                </div>
+                            @endif
                         <div id="question-list">
                             <ul>
                                 @for ($i = 0; $i < count($questionid); $i++)
@@ -61,6 +63,8 @@
         </div>
     </div>
     <script type="text/javascript">
+        $(window).bind('beforeunload',function(){return '离开并提交试题';});
+
         var intDiff = parseInt({{ $lefttime }});//倒计时总秒数量
         var timestatu = $('.lefttime').val()
         function timer(intDiff){
@@ -107,6 +111,13 @@
         $(function(){
             timer(intDiff);
         });
+        function IsInArray(arr,val){
+
+            var testStr=','+arr.join(",")+",";
+
+            return testStr.indexOf(","+val+",")!=-1;
+
+        }
         layui.use('form', function(){
             var form = layui.form;
             form.render();
@@ -143,10 +154,25 @@
 
         }
         function choseanswer(obj) {
-            $(obj).siblings().removeClass('chose-answer-active')
-            $(obj).addClass('chose-answer-active');
-            var chose = $(obj).attr('data-answer');
-            $('.question-list-active').attr('data-chose',chose)
+            if($('.ismulty').val()==1){
+                if($(obj).hasClass('chose-answer-active')){
+                    $(obj).removeClass('chose-answer-active')
+                }else{
+                    $(obj).addClass('chose-answer-active');
+                }
+                var answerlist = new Array()
+                $('.chose-answer-active').each(function () {
+                    answerlist.push($(this).attr('data-answer'))
+                })
+                var str=answerlist.join('-')
+                console.log(str)
+                $('.question-list-active').attr('data-chose',str)
+            }else{
+                $(obj).siblings().removeClass('chose-answer-active')
+                $(obj).addClass('chose-answer-active');
+                var chose = $(obj).attr('data-answer');
+                $('.question-list-active').attr('data-chose',chose)
+            }
         }
         function getquestion(obj) {
             var url = '{{route('getquestion')}}'
@@ -182,12 +208,24 @@
             var ue = '{{$_GET['id']}}'
             $.post(url,{'_token': '{{ csrf_token() }}',id:id,ue:ue},function (data) {
                 data=JSON.parse(data);
-                $('#question h3').html(data.question.title)
+                var tx = '';
+                if(data.question.qid == 0){
+                    tx="(单选题)"
+                }else if(data.question.qid == 1){
+                    tx='<input type="hidden" value="1" class="ismulty">(多选题)'
+                }else if(data.question.qid == 2){
+                    tx="(判断题)"
+                }
+                $('#question h3').html(tx+data.question.title)
                 var answerHtml = ''
                 var choseHtml = ''
                 data.answer.forEach(function( val, index ) {
                     answerHtml+='<li style="font-size: 20px;">'+val.no+'.'+val.title+'</li>'
-                    choseHtml+='<li data-answer="'+val.no+'" onclick="choseanswer(this)" class="anweritem">'+val.no+'</li>'
+                    if(data.question.qid == 1){
+                        choseHtml+='<li data-answer="'+val.no+'" onclick="choseanswer(this)" class="anweritem multyquestion">'+val.no+'</li>'
+                    }else{
+                        choseHtml+='<li data-answer="'+val.no+'" onclick="choseanswer(this)" class="anweritem">'+val.no+'</li>'
+                    }
                 });
                 if(data.collect.length){
                     $("#collect").attr("checked","checked")
@@ -204,25 +242,53 @@
                 $('#chose-answer').append(choseHtml);
                 if($('.question-list-active').attr('data-chose')){
                     var chose = $('.question-list-active').attr('data-chose')
-                    $('.anweritem').each(function () {
-                        if($(this).attr('data-answer') == chose){
-                            $(this).addClass('chose-answer-active')
-                        }
-                    })
+                    if($('.ismulty').val()==1){
+                        var a = chose.split('-')
+                        $('.anweritem').each(function () {
+                            if(IsInArray(a,$(this).attr('data-answer'))){
+                                $(this).addClass('chose-answer-active')
+                            }
+                        })
+                    }else{
+                        $('.anweritem').each(function () {
+                            if($(this).attr('data-answer') == chose){
+                                $(this).addClass('chose-answer-active')
+                            }
+                        })
+                    }
                 }
                 if(data.right){
-                    $('.anweritem').each(function () {
-                        if($(this).attr('data-answer') == data.right){
-                            $(this).addClass('chose-answer-active')
-                        }
-                    })
+                    if(data.right.length>1){
+                        var right = data.right.split('-')
+                        $('.anweritem').each(function () {
+                            $(this).removeClass('chose-answer-active')
+                            if(IsInArray(right,$(this).attr('data-answer'))){
+                                $(this).addClass('chose-answer-active')
+                            }
+                        })
+                    }else{
+                        $('.anweritem').each(function () {
+                            if($(this).attr('data-answer') == data.right){
+                                $(this).addClass('chose-answer-active')
+                            }
+                        })
+                    }
                 }
                 if(data.wrong){
-                    $('.anweritem').each(function () {
-                        if($(this).attr('data-answer') == data.wrong){
-                            $(this).addClass('wrong')
-                        }
-                    })
+                    if(data.wrong.length>1){
+                        var wrong = data.wrong.split('-')
+                        $('.anweritem').each(function () {
+                            if(!IsInArray(right,$(this).attr('data-answer')) && IsInArray(wrong,$(this).attr('data-answer'))){
+                                $(this).addClass('wrong')
+                            }
+                        })
+                    }else {
+                        $('.anweritem').each(function () {
+                            if ($(this).attr('data-answer') == data.wrong) {
+                                $(this).addClass('wrong')
+                            }
+                        })
+                    }
                 }
             })
         }

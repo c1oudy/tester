@@ -48,7 +48,7 @@ class ExamController extends Controller
         $data['answer']=$answer;
         $data['curid']=$question[0]['id'];
         $lefttime = examModel::where(['id'=>$userexam['examid']])->get()->toArray()[0]['time'];
-        $data['lefttime']=10;
+        $data['lefttime']=$lefttime;
         $data['pass']=$userexam['pass'];
         return view('Home/exam/exam',$data);
     }
@@ -74,7 +74,11 @@ class ExamController extends Controller
         $right = array_map('reset', questionModel::whereIn('id',$questionid)->select(['right'])->get()->toArray());
         $score = 0;
         for($i=0;$i<count($right);$i++){
-            if($right["$i"] == $answer["$i"]){
+            $com1 = explode(',',$right["$i"]);
+            $com2 = explode(',',$answer["$i"]);
+            sort($com1);
+            sort($com2);
+            if($com1 == $com2){
                 $score++;
             }
         }

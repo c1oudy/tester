@@ -72,13 +72,17 @@
             var question_id=$('.question-list-active').attr('data-id')
             var url = '{{route('questionoperate')}}'
             if($('.ismulty').val()==1){
-                $(obj).addClass('chose-answer-active');
+                if($(obj).hasClass('chose-answer-active')){
+                    $(obj).removeClass('chose-answer-active')
+                }else{
+                    $(obj).addClass('chose-answer-active');
+                }
                 var answerlist = new Array()
                 $('.chose-answer-active').each(function () {
                     answerlist.push($(this).attr('data-answer'))
                 })
                 $.post(url,{'_token': '{{ csrf_token() }}',question_id:question_id,operate:'getanswer'},function (v) {
-                    var right = v.split(',');
+                    var right = v.split('-');
                     if(right.length == answerlist.length){
                         if(right.sort().toString() == answerlist.sort().toString()){
                             layui.use('layer', function(){
@@ -118,11 +122,8 @@
             }
         }
         function IsInArray(arr,val){
-
             var testStr=','+arr.join(",")+",";
-
             return testStr.indexOf(","+val+",")!=-1;
-
         }
         function getquestion(obj) {
             var url = '{{route('getquestion')}}'
@@ -157,7 +158,6 @@
             }
             $.post(url,{'_token': '{{ csrf_token() }}',id:id},function (data) {
                 data=JSON.parse(data);
-                console.log(data)
                 var tx = '';
                 if(data.question.qid == 0){
                     tx="(单选题)"
