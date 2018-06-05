@@ -73,4 +73,19 @@ class UserController extends Controller
         }
         return view('Home/user/myinfo',$data);
     }
+    public function stuidoperate(){
+        if($_POST['operate'] == 'edit'){
+            $isset = userModel::where(['stuid'=>$_POST['stuid']])->get()->toArray();
+            if(!empty($isset))
+            {
+                return 2;
+            }
+            $user = Auth::user()->toArray();
+            $user = userModel::find($user['id']);
+            $user->stuid = $_POST['stuid'];
+            $user->save();
+            return 1;
+        }
+
+    }
 }
