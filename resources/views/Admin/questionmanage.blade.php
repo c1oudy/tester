@@ -18,8 +18,8 @@
                     <th>#</th>
                     <th>内容</th>
                     <th>正确答案</th>
+                    <th>题型</th>
                     <th>分类</th>
-                    {{--<th>难度</th>--}}
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -30,8 +30,8 @@
                         <th>{{$val['id']}}</th>
                         <th>{{$val['title']}}</th>
                         <th>{{$val['right']}}</th>
+                        <th>@if($val['qid']==0) 单选题 @elseif($val['qid']==1) 多选题 @elseif($val['qid']==2) 判断题 @endif</th>
                         <th>{{$val['type_id']}}</th>
-                        {{--<th>{{$val['dif_id']}}</th>--}}
                         <th><button type="button" class="btn btn-primary btn-sm delete" data-id="{{$val['id']}}">删除</button><button type="button" onclick="openedit(this)" class="btn btn-primary btn-sm" data-toggle="modal" data-id="{{$val['id']}}" data-target=".addtype">编辑</button></th>
                     </tr>
                     @endforeach

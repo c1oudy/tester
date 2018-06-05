@@ -15,7 +15,7 @@
                             </div>
                         @endif
                         <div id="question">
-                            <h3>{{$question['title']}}</h3>
+                            <h3>@if($question['qid']==0)(单选题)@elseif($question['qid']==1)<input type="hidden" value="1" class="ismulty">(多选题)@elseif($question['qid']==2)(判断题)@endif{{$question['title']}}</h3>
                             <div id="answer">
                                 <ul>
                                     @foreach($answer as $val)
@@ -26,7 +26,7 @@
 
                             <div id="chose-answer">
                                 @foreach($answer as $val)
-                                    <li data-answer="{{$val['no']}}" onclick="choseanswer(this)" class="anweritem">{{$val['no']}}</li>
+                                    <li data-answer="{{$val['no']}}" onclick="choseanswer(this)" class="anweritem @if($question['qid']==1) multyquestion @endif">{{$val['no']}}</li>
                                 @endforeach
                             </div>
                             {{--<div id="img-box">--}}
@@ -69,23 +69,60 @@
             });
         });
         function choseanswer(obj) {
-            $(obj).siblings().removeClass('chose-answer-active')
-            $(obj).addClass('chose-answer-active');
-            var chose = $(obj).attr('data-answer');
             var question_id=$('.question-list-active').attr('data-id')
             var url = '{{route('questionoperate')}}'
-            $.post(url,{'_token': '{{ csrf_token() }}',question_id:question_id,operate:'getanswer'},function (v) {
-                if(chose == v){
-                }else{
-                    $(obj).css('background','red')
-                    $('.anweritem').each(function () {
-                        if($(this).attr('data-answer')==v){
-                            $(this).siblings().removeClass('chose-answer-active')
-                            $(this).addClass('chose-answer-active');
+            if($('.ismulty').val()==1){
+                $(obj).addClass('chose-answer-active');
+                var answerlist = new Array()
+                $('.chose-answer-active').each(function () {
+                    answerlist.push($(this).attr('data-answer'))
+                })
+                $.post(url,{'_token': '{{ csrf_token() }}',question_id:question_id,operate:'getanswer'},function (v) {
+                    var right = v.split(',');
+                    if(right.length == answerlist.length){
+                        if(right.sort().toString() == answerlist.sort().toString()){
+                            layui.use('layer', function(){
+                                var layer = layui.layer;
+                                layer.msg('回答正确');
+                            });
+                        }else{
+                            $('.anweritem').each(function () {
+                                if(IsInArray(answerlist,$(this).attr('data-answer')) && !IsInArray(right,$(this).attr('data-answer')) ){
+                                    layer.msg('回答错误');
+                                    $(this).css('background','red')
+                                }
+                                if( IsInArray(right,$(this).attr('data-answer')) ){
+                                    $(this).addClass('chose-answer-active');
+                                }
+                            })
                         }
-                    })
-                }
-            });
+                    }
+                });
+            }else{
+                $(obj).siblings().removeClass('chose-answer-active')
+                $(obj).addClass('chose-answer-active');
+                var chose = $(obj).attr('data-answer');
+
+                $.post(url,{'_token': '{{ csrf_token() }}',question_id:question_id,operate:'getanswer'},function (v) {
+                    if(chose == v){
+                    }else{
+                        $(obj).css('background','red')
+                        $('.anweritem').each(function () {
+                            if($(this).attr('data-answer')==v){
+                                $(this).siblings().removeClass('chose-answer-active')
+                                $(this).addClass('chose-answer-active');
+                            }
+                        })
+                    }
+                });
+            }
+        }
+        function IsInArray(arr,val){
+
+            var testStr=','+arr.join(",")+",";
+
+            return testStr.indexOf(","+val+",")!=-1;
+
         }
         function getquestion(obj) {
             var url = '{{route('getquestion')}}'
@@ -118,15 +155,27 @@
                 $(obj).addClass('question-list-active');
                 id = $(obj).attr('data-id')
             }
-
             $.post(url,{'_token': '{{ csrf_token() }}',id:id},function (data) {
                 data=JSON.parse(data);
-                $('#question h3').html(data.question.title)
+                console.log(data)
+                var tx = '';
+                if(data.question.qid == 0){
+                    tx="(单选题)"
+                }else if(data.question.qid == 1){
+                    tx='<input type="hidden" value="1" class="ismulty">(多选题)'
+                }else if(data.question.qid == 2){
+                    tx="(判断题)"
+                }
+                $('#question h3').html(tx+data.question.title)
                 var answerHtml = ''
                 var choseHtml = ''
                 data.answer.forEach(function( val, index ) {
                     answerHtml+='<li style="font-size: 20px;">'+val.no+'.'+val.title+'</li>'
-                    choseHtml+='<li data-answer="'+val.no+'" onclick="choseanswer(this)" class="anweritem">'+val.no+'</li>'
+                    if(data.question.qid == 1){
+                        choseHtml+='<li data-answer="'+val.no+'" onclick="choseanswer(this)" class="anweritem multyquestion">'+val.no+'</li>'
+                    }else{
+                        choseHtml+='<li data-answer="'+val.no+'" onclick="choseanswer(this)" class="anweritem">'+val.no+'</li>'
+                    }
                 });
                 if(data.collect.length){
                     $("#collect").attr("checked","checked")

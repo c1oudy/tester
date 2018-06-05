@@ -88,7 +88,7 @@ class QuestionController extends Controller
                         $question = new questionModel();
                         $question->type_id=$type[0]["id"];
                         $question->title=$val[1];
-                        $question->dif_id=(int)$val[3];
+                        $question->qid=$val[3];
                         $question->right=$val[4];
                         $question->save();
                         $question=questionModel::where(['title'=>$val[1]])->get()->toArray();
