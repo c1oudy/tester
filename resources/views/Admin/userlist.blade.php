@@ -33,7 +33,7 @@
                         <td>{{$item['email']}}</td>
                         <td>
                             <p style="display: none">{{$id=$item['class_id']}}</p>
-                            {{$class["$id"]['name']}}
+                            {{$class["$id"]['tid']}}
                         </td>
                         <td>@if($item['statu']==0)未提交审核 @elseif($item['statu']==1)待审核@elseif($item['statu']==2)已通过@elseif($item['statu']==3)未通过@endif</td>
                         <td style="padding: 0px">

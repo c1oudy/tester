@@ -32,6 +32,18 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label" style="width: 137px;text-align: left;">判断题数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="panduan" id="major" required  lay-verify="required|number" placeholder="判断题数量" autocomplete="off" class="layui-input" style="width: 200px">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="width: 137px;text-align: left;">单选题数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="danxuan" id="major" required  lay-verify="required|number" placeholder="单选题数量" autocomplete="off" class="layui-input" style="width: 200px">
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label" style="width: 137px;text-align: left;">答题时间(分钟)</label>
                     <div class="layui-input-block">
                         <input type="text" name="time" id="time" required  lay-verify="required|number" placeholder="答题时间" autocomplete="off" class="layui-input" style="width: 200px">
@@ -48,7 +60,7 @@
                     <label class="layui-form-label" style="width: 137px;text-align: left;">考试单位</label>
                     <div class="layui-input-block">
                         @foreach($class as $val)
-                        <input type="checkbox" lay-filter="class" name="class[{{$val['id']}}]" title="{{$val['name']}}"><span>(12)</span>
+                        <input type="checkbox" lay-filter="class" name="class[{{$val['name']}}]" title="{{$val['name']}}"><span></span>
                         @endforeach
                     </div>
                 </div>

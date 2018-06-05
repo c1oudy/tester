@@ -83,7 +83,7 @@ class QuestionController extends Controller
                         $type->save();
                         $type = typeModel::where(['name'=>$val[2]])->get()->toArray();
                     }
-                    $question=questionModel::where(['title'=>$val[1]])->get()->toArray();
+                    $question=questionModel::where(['title'=>$val[1],'type_id'=>$type[0]["id"]])->get()->toArray();
                     if(!$question){
                         $question = new questionModel();
                         $question->type_id=$type[0]["id"];

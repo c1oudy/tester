@@ -18,8 +18,8 @@
                     <thead>
                     <tr>
                         <th><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".addclass">+</button></th>
-                        <th>班级名</th>
-                        <th>编号</th>
+                        <th>学院名</th>
+                        <th>班级编号</th>
                         <th>是否启用</th>
                         <th>操作</th>
                     </tr>
@@ -41,7 +41,7 @@
                             </td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="button" data-id="{{$item['id']}}" class="btn btn-primary btn-sm deleteclass">删除</button>
+                                    {{--<button type="button" data-id="{{$item['id']}}" class="btn btn-primary btn-sm deleteclass">删除</button>--}}
                                     <button type="button" data-id="{{$item['id']}}" class="btn btn-primary btn-sm userclass">查看</button>
                                 </div>
                             </td>

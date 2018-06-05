@@ -17,13 +17,23 @@ class ExamController extends Controller
 {
     //
     public function examsetting(){
-        $data['class'] = classModel::where('id','!=',1)->get()->toArray();
+        $data['class'] = classModel::where('id','!=',1)->select('name')->distinct()->get()->toArray();
         return view('Admin/examsetting',$data);
     }
     public function addexam(){
         $class = array();
         foreach($_GET['class'] as $key=>$val){
-            $class[]=$key;
+            $class[]='"'.$key.'"';
+        }
+        $classlist = [];
+        $classlist1 = [];
+        foreach($class as $val){
+            $classlist1[]=DB::select("select id from class where name =$val and statu=1");
+        }
+        foreach($classlist1 as $val){
+            foreach ($val as $v){
+                $classlist[] = $v->id;
+            }
         }
         $exam = new examModel();
         $exam->title = $_GET['title'];
@@ -33,28 +43,68 @@ class ExamController extends Controller
         $exam->last = $_GET['last'];
         $strClass=implode(',',$class);
         $exam->classlist = $strClass;
-        $userlist=userModel::whereIn('class_id',$class)->select(['id','class_id'])->get()->toArray();
+        $userlist=userModel::whereIn('class_id',$classlist)->select(['id','class_id'])->get()->toArray();
         $exam->save();
         $exam = examModel::where(['title'=>$_GET['title']])->get()->toArray();
         foreach($userlist as $val){
             $userexam = new userexamModel();
-            $userexam->userid=$val['id'];
             $classname = classModel::where(['id'=>$val['class_id']])->select(['name'])->get()->toArray();
             $typeid = typeModel::where(['name'=>$classname[0]['name']])->get()->toArray();
-            $question = array_map('reset',questionModel::where(['type_id'=>$typeid[0]['id']])->select(['id'])->get()->toArray());
+            $arrQuestion = array();
+            $total = $_GET['total'];
+            $major = $_GET['major'];
+            $public=$total-$major;
+            $question = array_map('reset',questionModel::where(['type_id'=>$typeid[0]['id'],'qid'=>'0'])->select(['id'])->get()->toArray());
+            $single = $_GET['danxuan'];
+            $max = max(0,$single-$public);
             $numbers = range (0,count($question)-1);
             shuffle ($numbers);
-            $num=$_GET['major'];
-            $result = array_slice($numbers,0,$num);
-            $arrQuestion = array();
+            $zys = rand($max,$single);
+            $ggs = $single - $zys;
+            $result = array_slice($numbers,0,$zys);
             foreach ($result as $v){
                 $arrQuestion[] = $question["$v"];
             }
-            $question = array_map('reset',questionModel::where(['type_id'=>2])->select(['id'])->get()->toArray());
+            $question = array_map('reset',questionModel::where(['type_id'=>2,'qid'=>'0'])->select(['id'])->get()->toArray());
+            $numbers = range (0,count($question)-1);
+            shuffle($numbers);
+            $result = array_slice($numbers,0,$ggs);
+            foreach ($result as $v){
+                $arrQuestion[] = $question["$v"];
+            }
+            $question = array_map('reset',questionModel::where(['type_id'=>$typeid[0]['id'],'qid'=>'2'])->select(['id'])->get()->toArray());
+            $numbers = range (0,count($question)-1);
+            shuffle($numbers);
+            $pd = (int)$_GET['panduan'];
+            $muit = $total -$pd-$single;
+            $min = max(0,$major-$muit-$zys);
+            $max = min($pd,$major-$zys);
+            $zypd = rand($min,$max);
+            $ggpd = $pd - $zypd;
+            $result = array_slice($numbers,0,$zypd);
+            foreach ($result as $v){
+                $arrQuestion[] = $question["$v"];
+            }
+            $question = array_map('reset',questionModel::where(['type_id'=>2,'qid'=>'2'])->select(['id'])->get()->toArray());
             $numbers = range (0,count($question)-1);
             shuffle ($numbers);
-            $num=$_GET['total']-count($arrQuestion);
-            $result = array_slice($numbers,0,$num);
+            $result = array_slice($numbers,0,$ggpd);
+            foreach ($result as $v){
+                $arrQuestion[] = $question["$v"];
+            }
+            $question = array_map('reset',questionModel::where(['type_id'=>$typeid[0]['id'],'qid'=>'1'])->select(['id'])->get()->toArray());
+            $numbers = range (0,count($question)-1);
+            shuffle($numbers);
+            $zym = $major - $zypd-$zys;
+            $ggm = $total - $major -$ggpd -$ggs;
+            $result = array_slice($numbers,0,$zym);
+            foreach ($result as $v){
+                $arrQuestion[] = $question["$v"];
+            }
+            $question = array_map('reset',questionModel::where(['type_id'=>2,'qid'=>'1'])->select(['id'])->get()->toArray());
+            $numbers = range (0,count($question)-1);
+            shuffle ($numbers);
+            $result = array_slice($numbers,0,$ggm);
             foreach ($result as $v){
                 $arrQuestion[] = $question["$v"];
             }

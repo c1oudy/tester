@@ -63,6 +63,7 @@
         </div>
     </div>
     <script type="text/javascript">
+        
         $(window).bind('beforeunload',function(){return '离开并提交试题';});
 
         var intDiff = parseInt({{ $lefttime }});//倒计时总秒数量
