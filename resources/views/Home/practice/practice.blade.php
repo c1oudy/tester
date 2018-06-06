@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
@@ -34,7 +33,7 @@
                             {{--</div>--}}
                         </div>
 
-                        <div id="question-list">
+                        <div id="question-list"style="height: 400px;overflow: scroll;">
                             <ul>
                                 @for ($i = 0; $i < count($questionid); $i++)
                                     <li onclick="getquestion(this)" data-id="{{$questionid[$i]}}" @if($curid==$questionid[$i])class="question-list-active" @endif>{{($i+1)}}</li>

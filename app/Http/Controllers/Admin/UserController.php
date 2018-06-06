@@ -63,13 +63,6 @@ class UserController extends Controller
             $uesr = userModel::find($uid);
             $uesr->statu = 3;
             $uesr->save();
-            $message = new messageModel();
-            $message->send_id = session()->get('adminuser')->name;
-            $message->receive_id = $uid;
-            $message->title = '班级审核';
-            $message->content = "班级审核被拒绝";
-            $message->statu = 0;
-            $message->save();
             return 1;
         }
     }
@@ -77,20 +70,20 @@ class UserController extends Controller
         $limit = 10;
         if(!isset($_GET['page'])){
             if(!isset($_GET['class'])){
-                $data['user'] = userModel::offset(0)->limit($limit)->orderBy('id', 'desc')->get()->toArray();
+                $data['user'] = userModel::offset(0)->limit($limit)->orderBy('statu', 'asc')->get()->toArray();
                 $data['count'] = userModel::count();
             }else{
-                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset(0)->orderBy('id', 'desc')->limit($limit)->get()->toArray();
+                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset(0)->orderBy('statu', 'asc')->limit($limit)->get()->toArray();
                 $data['count'] = userModel::where(['class_id'=>$_GET['class']])->count();
             }
         }else{
             $page =$_GET['page'];
             $offset=($page-1)*$limit;
             if(!isset($_GET['class'])){
-                $data['user'] = userModel::offset($offset)->limit($limit)->orderBy('id', 'desc')->get()->toArray();
+                $data['user'] = userModel::offset($offset)->limit($limit)->orderBy('statu', 'asc')->get()->toArray();
                 $data['count'] = userModel::count();
             }else{
-                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset($offset)->limit($limit)->orderBy('id', 'desc')->get()->toArray();
+                $data['user'] = userModel::where(['class_id'=>$_GET['class']])->offset($offset)->limit($limit)->orderBy('statu', 'asc')->get()->toArray();
                 $data['count'] = userModel::where(['class_id'=>$_GET['class']])->count();
             }
         }
@@ -131,7 +124,7 @@ class UserController extends Controller
             array_shift($data);
             $classid=classModel::where(['tid'=>$classno])->first()->id;
             foreach($data as $val){
-                if(!userModel::where(['stuid'=>$val[2]])->first()){
+                if(!userModel::where(['stuid'=>$val[2]])->orWhere('email', '=', $val[1])->first()){
                     $user = new userModel();
                     $user->name=$val[0];
                     $user->email=$val[1];

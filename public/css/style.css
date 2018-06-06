@@ -200,3 +200,6 @@
 .wrong{
     background: red;
 }
+#question-list::-webkit-scrollbar{
+    display: none;
+}

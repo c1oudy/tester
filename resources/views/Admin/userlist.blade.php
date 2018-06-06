@@ -50,7 +50,7 @@
             </table>
             <div style="text-align: center" id="test1"></div>
             <span><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".excelbox">上传用户</button></span>
-            <span><a href="{{asset('file/excel/example.xls')}}">下载模板</a></span>
+            <span><a href="{{asset('file/excel/user.xls')}}">下载模板</a></span>
         </section>
     </section>
 
@@ -149,7 +149,7 @@
             var id = $(this ).attr('data-id');
             var url = "{{route('homeuseroperate')}}";
             $.post(url,{'_token': '{{ csrf_token() }}',uid:id,operate:'unpass'},function (v) {
-                // window.location.reload();
+                window.location.reload();
             });
         })
     </script>
